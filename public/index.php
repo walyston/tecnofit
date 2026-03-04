@@ -53,7 +53,7 @@ try {
 
     $router->add(new Route(
         method: 'GET',
-        path: '/movements/{movementId}/ranking',
+        path: '/movements/ranking',
         controller: MovementRankingController::class,
         action: 'handle'
     ));
@@ -71,7 +71,22 @@ try {
 
     $controllerClass = $routeData['controller'];
     $action = $routeData['action'];
-    $params = $routeData['params'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Query Parameter Resolver
+    |--------------------------------------------------------------------------
+    */
+
+    $params = $routeData['params'] ?? [];
+
+    if (empty($params)) {
+        $queryParams = $_GET;
+
+        if (!empty($queryParams)) {
+            $params = array_values($queryParams);
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
